@@ -7,8 +7,13 @@ class MainFrame(tk.Frame):
 		self.createGUI()
 
 	def createGUI(self):
-		btn = tk.Button(self, text="Play",command=lambda: self.controller.show_frame('GameFrame'))
-		btn.pack()
+		self.config(background="#4477bb")
+
+		btn = tk.Button(self, text="Play Game", width=20,command=lambda: self.controller.show_frame('GameFrame'))
+		btn.place(relx=0.5, rely=0.5, anchor='c')
+
+		btn = tk.Button(self, text="Quit Game", width=20,command=self.controller.quit)
+		btn.place(relx=0.5, rely=0.5, anchor='c')
 
 
 class GameFrame(tk.Frame):
@@ -52,6 +57,10 @@ class Game():
 
 	def start(self):
 		self.parent.mainloop()
+
+	def quit(self):
+		self.parent.quit()
+
 
 game = Game(tk.Tk())
 game.start()
