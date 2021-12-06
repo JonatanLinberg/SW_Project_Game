@@ -7,7 +7,7 @@ class Game():
 		self.createGUI()
 
 	def createGUI(self):
-		
+		pass
 
 	def start(self):
 		self.parent.mainloop()
