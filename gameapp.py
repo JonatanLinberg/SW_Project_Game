@@ -2,24 +2,25 @@ import tkinter as tk
 
 class MainFrame(tk.Frame):
 	def __init__(self, parent, controller):
-		self.controller = controller
 		tk.Frame.__init__(self, parent)
+		self.controller = controller
 		self.createGUI()
 
 	def createGUI(self):
-		self.config(background="#4477bb")
+		self.config(background="#259")
 
 		btn = tk.Button(self, text="Play Game", width=20,command=lambda: self.controller.show_frame('GameFrame'))
-		btn.place(relx=0.5, rely=0.5, anchor='c')
+		btn.place(relx=0.5, rely=0.55, anchor='c')
 
 		btn = tk.Button(self, text="Quit Game", width=20,command=self.controller.quit)
-		btn.place(relx=0.5, rely=0.55, anchor='c')
+		btn.place(relx=0.5, rely=0.6, anchor='c')
+
 
 
 class GameFrame(tk.Frame):
 	def __init__(self, parent, controller):
-		self.controller = controller
 		tk.Frame.__init__(self, parent)
+		self.controller = controller
 		self.createGUI()
 
 	def createGUI(self):
@@ -36,7 +37,7 @@ class Game():
 
 	def createGUI(self):
 		self.parent.title("GAME")
-		self.parent.geometry("960x720")
+		self.parent.geometry("960x720+480+100")
 
 		container = tk.Frame(self.parent)
 		container.pack(side="top", fill="both", expand=True)
