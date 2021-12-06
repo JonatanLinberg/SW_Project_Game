@@ -13,7 +13,7 @@ class MainFrame(tk.Frame):
 		btn.place(relx=0.5, rely=0.5, anchor='c')
 
 		btn = tk.Button(self, text="Quit Game", width=20,command=self.controller.quit)
-		btn.place(relx=0.5, rely=0.5, anchor='c')
+		btn.place(relx=0.5, rely=0.55, anchor='c')
 
 
 class GameFrame(tk.Frame):
