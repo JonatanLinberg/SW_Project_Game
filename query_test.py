@@ -1,6 +1,6 @@
 from stardog import Connection as SDConn
 
-q = """select distinct ?n ?b ?d ?lat ?long where {
+query = """select distinct ?n ?b ?d ?lat ?long where {
 ?p a dbo:Person.
 ?p foaf:name ?n.
 ?p dbo:birthYear ?b.
@@ -11,7 +11,7 @@ q = """select distinct ?n ?b ?d ?lat ?long where {
 }"""
 
 with SDConn('sparql', endpoint='https://dbpedia.org/') as conn:
-	res = conn.select(q)
+	res = conn.select(query)
 
 for r in res['results']['bindings']:
 	print("%s, born %s, died %s\t\t%f:%f" % (r['n']['value'], r['b']['value'], r['d']['value'], float(r['long']['value']), float(r['lat']['value'])))
