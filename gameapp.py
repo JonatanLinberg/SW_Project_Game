@@ -37,7 +37,7 @@ class Game():
 
 	def createGUI(self):
 		self.parent.title("GAME")
-		self.parent.geometry("960x720+480+100")
+		self.parent.geometry("960x720")
 
 		container = tk.Frame(self.parent)
 		container.pack(side="top", fill="both", expand=True)
