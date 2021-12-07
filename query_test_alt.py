@@ -1,6 +1,19 @@
 from SPARQLWrapper import SPARQLWrapper, JSON
 
-queries = ["""
+
+def make_query(name):
+	return """SELECT ?img WHERE {
+	?person wdt:P31 wd:Q5;
+			wdt:P18 ?img.
+	SERVICE wikibase:label {
+    	bd:serviceParam wikibase:language "en" .
+   	}
+   	} LIMIT 1
+   	"""
+
+
+
+q = """
 SELECT DISTINCT ?n ?b ?d ?blat ?blong WHERE {
 ?p a dbo:Person.
 ?p foaf:name ?n.
@@ -9,29 +22,31 @@ SELECT DISTINCT ?n ?b ?d ?blat ?blong WHERE {
 ?p dbo:birthPlace ?c.
 ?c geo:lat ?blat.
 ?c geo:long ?blong.
-} LIMIT 10
-""",
+FILTER (?b < "2000-01-01"^^xsd:date)
+} GROUP BY ?p LIMIT 20
 """
-SELECT DISTINCT ?Concept WHERE {[] a ?Concept. } LIMIT 10
-"""]
 
-endpts = ['https://dbpedia.org/sparql', 'https://query.wikidata.org/sparql']
+e = ['https://dbpedia.org/sparql', 'https://query.wikidata.org/sparql']
 
-res = []
+conn = SPARQLWrapper(e[0])
+conn.setQuery(q)
+conn.setReturnFormat(JSON)
+try:
+	res = (conn.query().convert())
+except Exception as err: 
+	print(err)
 
-for i in range(len(queries)):
-	conn = SPARQLWrapper(endpts[i])
-	conn.setQuery(queries[i])
-	conn.setReturnFormat(JSON)
-	try:
-		res.append(conn.query().convert())
-	except Exception as e: 
-		print(e)
+print(len(res['results']['bindings']))
 
-
-for r in res[0]['results']['bindings']:
+for r in res['results']['bindings']:
 	print("%s, born %s, died %s\t\t%f:%f" % (r['n']['value'], r['b']['value'], r['d']['value'], float(r['blong']['value']), float(r['blat']['value'])))
 
-for r in res:
-	print("#######################################\n\n#######################################")
-	print(r)
+	conn = SPARQLWrapper(e[1])
+	conn.setQuery(make_query(r['n']['value']))
+	conn.setReturnFormat(JSON)
+	try:
+		res = (conn.query().convert())
+	except Exception as err: 
+		print(err)
+
+	print(res['results']['bindings'][0]['img']['value'])
