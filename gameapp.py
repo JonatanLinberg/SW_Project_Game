@@ -33,6 +33,24 @@ class MainFrame(tk.Frame):
 		else:
 			self.loadlbl.place_forget()
 
+class ResultFrame(tk.Frame):
+	def __init__(self, parent, controller):
+		tk.Frame.__init__(self, parent)
+		self.controller = controller
+		self.createGUI()
+
+	def createGUI(self):
+
+		self.result = tk.Label(self, text='Name2', relief=tk.GROOVE)
+		self.result.place(relx=0.5, rely=0.4, width=200, anchor='c')
+
+		btn = tk.Button(self, text="Game finished", width=200, command=lambda: self.controller.show_frame("MainFrame"))
+		btn.place(relx=0.5, rely=0.6, anchor='c')
+
+	def updateGame(self):
+		self.result.config(text="Total Points: " + str(self.controller.getPoints()))
+
+
 
 class GameFrame(tk.Frame):
 	def __init__(self, parent, controller):
@@ -88,7 +106,7 @@ class Game():
 		container.grid_rowconfigure(0, weight=1)
 		container.grid_columnconfigure(0, weight=1)
 
-		for F in (MainFrame, GameFrame):
+		for F in (MainFrame, GameFrame, ResultFrame):
 			page_name = F.__name__
 			frame = F(container, self)
 			self.frames[page_name] = frame
