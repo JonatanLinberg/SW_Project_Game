@@ -1,4 +1,6 @@
 import tkinter as tk
+import person
+import query
 
 class MainFrame(tk.Frame):
 	def __init__(self, parent, controller):
@@ -55,6 +57,7 @@ class Game():
 		self.parent = parent
 		self.frames = {}
 
+		self.initGame()
 		self.createGUI()
 
 	def createGUI(self):
@@ -74,6 +77,15 @@ class Game():
 			frame.grid(row=0, column=0, sticky="nsew")
 
 		self.show_frame('MainFrame')
+
+	def getCurrentImages(self):
+		pass
+
+	def getCurrentNames(self):
+		pass
+
+	def getPoints(self):
+		pass
 
 	def press_yes(self):
 		pass
