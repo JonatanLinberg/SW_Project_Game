@@ -40,6 +40,7 @@ class ResultFrame(tk.Frame):
 		self.createGUI()
 
 	def createGUI(self):
+		self.config(background="#eee5dc")
 
 		self.result = tk.Label(self, text='Name2', relief=tk.GROOVE)
 		self.result.place(relx=0.5, rely=0.4, width=200, anchor='c')
