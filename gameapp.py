@@ -28,19 +28,19 @@ class GameFrame(tk.Frame):
 	def createGUI(self):
 		self.config(background="#eee5dc")
 
-		fig1 = tk.Label(self, text='Fig1', relief=tk.GROOVE)
-		fig1.place(relx=0.3, rely=0.3, relh=0.4, width=200, anchor='c')
+		self.fig1 = tk.Label(self, text='Fig1', relief=tk.GROOVE)
+		self.fig1.place(relx=0.3, rely=0.3, relh=0.4, width=200, anchor='c')
 
-		nmae1 = tk.Label(self, text='Name1', relief=tk.GROOVE)
-		nmae1.place(relx=0.3, rely=0.55, width=200, anchor='c')
+		self.name1 = tk.Label(self, text='Name1', relief=tk.GROOVE)
+		self.name1.place(relx=0.3, rely=0.55, width=200, anchor='c')
 
-		fig2 = tk.Label(self, text='Fig2', relief=tk.GROOVE)
-		fig2.place(relx=0.7, rely=0.3, relh=0.4, width=200, anchor='c')
+		self.fig2 = tk.Label(self, text='Fig2', relief=tk.GROOVE)
+		self.fig2.place(relx=0.7, rely=0.3, relh=0.4, width=200, anchor='c')
 
-		name2 = tk.Label(self, text='Name2', relief=tk.GROOVE)
-		name2.place(relx=0.7, rely=0.55, width=200, anchor='c')
+		self.name2 = tk.Label(self, text='Name2', relief=tk.GROOVE)
+		self.name2.place(relx=0.7, rely=0.55, width=200, anchor='c')
 
-		question = tk.Label(self, text = 'Are they alive at the same time?', bg="#eee5dc", font=('Arial', 20))
+		question = tk.Label(self, text='Are they alive at the same time?', bg="#eee5dc", font=('Arial', 20))
 		question.place(relx=0.5, rely=0.7, width=300, anchor='c')
 
 		btn_yes = tk.Button(self, text='YES', command=self.controller.press_yes)
@@ -48,6 +48,13 @@ class GameFrame(tk.Frame):
 
 		btn_no = tk.Button(self, text='NO', command=self.controller.press_no)
 		btn_no.place(relx=0.6, rely=0.8, width=75, anchor='c')
+
+	def updateGame(self):
+		self.name1.setText(self.controller.getCurrentNames()[0])
+		self.name2.setText(self.controller.getCurrentNames()[1])
+		self.fig1.setImage(self.controller.getCurrentImages()[0])
+		self.fig2.setImage(self.controller.getCurrentImages()[1])
+
 
 
 
