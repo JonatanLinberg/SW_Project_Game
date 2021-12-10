@@ -1,30 +1,27 @@
 from SPARQLWrapper import SPARQLWrapper, JSON
+from random import randrange
+
+def make_wd_query(URIs):
+	query = "SELECT ?uri ?img WHERE { \n"
+	for URI in URIs[:-1]:
+		query += "{ <%s> wdt:P18 ?img.\nBIND(<%s> AS ?uri) } UNION\n" % (URI, URI)
+	query += "{ <%s> wdt:P18 ?img.\nBIND(<%s> AS ?uri) } }" % (URIs[-1], URIs[-1])
+	return query
 
 
-def make_query(name):
-	return """SELECT ?img WHERE {
-	?person wdt:P31 wd:Q5;
-			wdt:P18 ?img.
-	SERVICE wikibase:label {
-    	bd:serviceParam wikibase:language "en" .
-   	}
-   	} LIMIT 1
-   	"""
-
-
-
+offset = randrange(9000)
 q = """
-SELECT DISTINCT ?n ?b ?d ?blat ?blong WHERE {
+SELECT DISTINCT ?wd ?n ?b ?d WHERE {
 ?p a dbo:Person.
+?p owl:sameAs ?wd.
 ?p foaf:name ?n.
 ?p dbo:birthYear ?b.
 ?p dbo:deathYear ?d.
-?p dbo:birthPlace ?c.
-?c geo:lat ?blat.
-?c geo:long ?blong.
 FILTER (?b < "2000-01-01"^^xsd:date)
-} GROUP BY ?p LIMIT 20
-"""
+FILTER (?p != dbr:Al-Damiri)
+FILTER regex(?wd, "wikidata")
+} ORDER BY RAND() OFFSET %d LIMIT 20
+""" % offset
 
 e = ['https://dbpedia.org/sparql', 'https://query.wikidata.org/sparql']
 
@@ -34,19 +31,20 @@ conn.setReturnFormat(JSON)
 try:
 	res = (conn.query().convert())
 except Exception as err: 
-	print(err)
+	print(err, err.__class__)
+	quit()
 
 print(len(res['results']['bindings']))
 
+conn = SPARQLWrapper(e[1])
+# all wd URIs: 		[r['wd']['value'] for r in res['results']['bindings']]
+q = make_wd_query([r['wd']['value'] for r in res['results']['bindings']])
+print(q)
+conn.setQuery(q)
+conn.setReturnFormat(JSON)
+res2 = (conn.query().convert())
+
+print(len(res2['results']['bindings']))
+
 for r in res['results']['bindings']:
-	print("%s, born %s, died %s\t\t%f:%f" % (r['n']['value'], r['b']['value'], r['d']['value'], float(r['blong']['value']), float(r['blat']['value'])))
-
-	conn = SPARQLWrapper(e[1])
-	conn.setQuery(make_query(r['n']['value']))
-	conn.setReturnFormat(JSON)
-	try:
-		res = (conn.query().convert())
-	except Exception as err: 
-		print(err)
-
-	print(res['results']['bindings'][0]['img']['value'])
+	print("%s, %s-%s" % (r['n']['value'], r['b']['value'], r['d']['value']))
