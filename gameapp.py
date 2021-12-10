@@ -44,7 +44,7 @@ class ResultFrame(tk.Frame):
 		self.result = tk.Label(self, text='Name2', relief=tk.GROOVE)
 		self.result.place(relx=0.5, rely=0.4, width=200, anchor='c')
 
-		btn = tk.Button(self, text="Game finished", width=200, command=lambda: self.controller.show_frame("MainFrame"))
+		btn = tk.Button(self, text="Game finished", width=20, command=lambda: self.controller.show_frame("MainFrame"))
 		btn.place(relx=0.5, rely=0.6, anchor='c')
 
 	def updateGame(self):
@@ -130,6 +130,8 @@ class Game():
 			for i in range(len(persons)):
 				if (persons[i].image is not None):
 					self.persons.append(persons[i])
+
+		self.persons = self.persons[:20]
 		self.nextRound()
 
 	def nextRound(self):
@@ -155,7 +157,7 @@ class Game():
 		return self.points
 
 	def correctAnswer(self):
-		a, b = *self.currentPersons
+		a, b = self.currentPersons
 		return ((a.byear >= b.byear and a.byear <= b.dyear ) or (b.byear >= a.byear and b.byear <= a.dyear))
 
 	def press_yes(self):
