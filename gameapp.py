@@ -11,12 +11,24 @@ class MainFrame(tk.Frame):
 	def createGUI(self):
 		self.config(background="#eee5dc")
 
-		btn = tk.Button(self, text="Play Game", width=20,command=lambda: self.controller.show_frame('GameFrame'))
+		btn = tk.Button(self, text="Play Game", width=20,command=self.playGame)
 		btn.place(relx=0.5, rely=0.55, anchor='c')
 
 		btn = tk.Button(self, text="Quit Game", width=20,command=self.controller.quit)
 		btn.place(relx=0.5, rely=0.6, anchor='c')
 
+		self.loadlbl = tk.Label(self, text="Loading Game...", width=20, font=('Arial', 20))
+		
+
+	def playGame(self):
+		self.isLoading(True)
+		self.controller.parent.after(10, self.controller.playGame)
+
+	def isLoading(self, bool):
+		if (bool):
+			self.loadlbl.place(relx=0.5, rely=0.3, anchor='c')
+		else:
+			self.loadlbl.place_forget()
 
 
 class GameFrame(tk.Frame):
@@ -57,7 +69,6 @@ class Game():
 		self.parent = parent
 		self.frames = {}
 
-		self.initGame()
 		self.createGUI()
 
 	def createGUI(self):
@@ -78,17 +89,38 @@ class Game():
 
 		self.show_frame('MainFrame')
 
-	def getCurrentImages(self):
-		pass
+	def playGame(self):
+		self.initGame()
+		self.frames['GameFrame'].updateGame()
+		self.frames['MainFrame'].isLoading(False)
+		self.show_frame('GameFrame')
 
-	def getCurrentNames(self):
-		pass
+	def initGame(self):
+		self.points = 0
+		self.persons = []
+
+		while (len(self.persons) < 20):
+			persons = query.get_dbpedia_persons()
+			persons = query.find_images_for(persons)
+
+			for i in range(len(persons)):
+				if (persons[i].image is not None):
+					self.persons.append(persons[i])
+
+		self.currentPersons = [self.persons.pop(), self.persons.pop()]
+
+
+	def getCurrentImages(self, person):
+		return self.currentPersons[person-1].image
+
+	def getCurrentNames(self, person):
+		return self.currentPersons[person-1].name
 
 	def getPoints(self):
-		pass
+		return self.points
 
 	def press_yes(self):
-		pass
+		points += 1
 
 	def press_no(self):
 		pass
