@@ -1,4 +1,7 @@
 import tkinter as tk
+import urllib
+from PIL import Image, ImageTk
+import io
 import person
 import query
 
@@ -40,14 +43,14 @@ class GameFrame(tk.Frame):
 	def createGUI(self):
 		self.config(background="#eee5dc")
 
-		self.fig1 = tk.Label(self, text='Fig1', relief=tk.GROOVE)
-		self.fig1.place(relx=0.3, rely=0.3, relh=0.4, width=200, anchor='c')
+		self.fig1 = tk.Label(self, relief=tk.GROOVE)
+		self.fig1.place(relx=0.3, rely=0.3, height=300, width=200, anchor='c')
 
 		self.name1 = tk.Label(self, text='Name1', relief=tk.GROOVE)
 		self.name1.place(relx=0.3, rely=0.55, width=200, anchor='c')
 
-		self.fig2 = tk.Label(self, text='Fig2', relief=tk.GROOVE)
-		self.fig2.place(relx=0.7, rely=0.3, relh=0.4, width=200, anchor='c')
+		self.fig2 = tk.Label(self, relief=tk.GROOVE)
+		self.fig2.place(relx=0.7, rely=0.3, height=300, width=200, anchor='c')
 
 		self.name2 = tk.Label(self, text='Name2', relief=tk.GROOVE)
 		self.name2.place(relx=0.7, rely=0.55, width=200, anchor='c')
@@ -62,12 +65,10 @@ class GameFrame(tk.Frame):
 		btn_no.place(relx=0.6, rely=0.8, width=75, anchor='c')
 
 	def updateGame(self):
-		self.name1.setText(self.controller.getCurrentNames(1))
-		self.name2.setText(self.controller.getCurrentNames(2))
-		self.fig1.setImage(self.controller.getCurrentImages(1))
-		self.fig2.setImage(self.controller.getCurrentImages(2))
-
-
+		self.name1.config(text=self.controller.getCurrentNames(1))
+		self.name2.config(text=self.controller.getCurrentNames(2))
+		self.fig1.config(image=self.controller.getCurrentImages(1))
+		self.fig2.config(image=self.controller.getCurrentImages(2))
 
 
 
@@ -114,11 +115,21 @@ class Game():
 				if (persons[i].image is not None):
 					self.persons.append(persons[i])
 
-		self.currentPersons = [self.persons.pop(), self.persons.pop()]
+		self.nextRound()
 
+	def nextRound(self):
+		if (len(self.persons) >= 2):
+			self.currentPersons = [self.persons.pop(), self.persons.pop()]
+			self.currentImages = [None, None]
+		else:
+			self.show_frame('MainFrame')
 
 	def getCurrentImages(self, person):
-		return self.currentPersons[person-1].image
+		if (self.currentImages[person-1] is None):
+			raw_data = urllib.request.urlopen(self.currentPersons[person-1].image).read()
+			im = Image.open(io.BytesIO(raw_data))
+			self.currentImages[person-1] = ImageTk.PhotoImage(im.resize((200, 300), Image.BILINEAR))
+		return self.currentImages[person-1]
 
 	def getCurrentNames(self, person):
 		return self.currentPersons[person-1].name
@@ -127,10 +138,13 @@ class Game():
 		return self.points
 
 	def press_yes(self):
-		points += 1
+		self.points += 1
+		self.nextRound()
+		self.frames['GameFrame'].updateGame()
 
 	def press_no(self):
-		pass
+		self.nextRound()
+		self.frames['GameFrame'].updateGame()
 
 	def show_frame(self, frame_name):
 		self.frames[frame_name].tkraise()
