@@ -50,10 +50,10 @@ class GameFrame(tk.Frame):
 		btn_no.place(relx=0.6, rely=0.8, width=75, anchor='c')
 
 	def updateGame(self):
-		self.name1.setText(self.controller.getCurrentNames()[0])
-		self.name2.setText(self.controller.getCurrentNames()[1])
-		self.fig1.setImage(self.controller.getCurrentImages()[0])
-		self.fig2.setImage(self.controller.getCurrentImages()[1])
+		self.name1.setText(self.controller.getCurrentNames(1))
+		self.name2.setText(self.controller.getCurrentNames(2))
+		self.fig1.setImage(self.controller.getCurrentImages(1))
+		self.fig2.setImage(self.controller.getCurrentImages(2))
 
 
 
