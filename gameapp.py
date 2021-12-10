@@ -7,7 +7,7 @@ class MainFrame(tk.Frame):
 		self.createGUI()
 
 	def createGUI(self):
-		self.config(background="#259")
+		self.config(background="#eee5dc")
 
 		btn = tk.Button(self, text="Play Game", width=20,command=lambda: self.controller.show_frame('GameFrame'))
 		btn.place(relx=0.5, rely=0.55, anchor='c')
@@ -24,19 +24,29 @@ class GameFrame(tk.Frame):
 		self.createGUI()
 
 	def createGUI(self):
+		self.config(background="#eee5dc")
+
 		fig1 = tk.Label(self, text='Fig1', relief=tk.GROOVE)
-		fig1.place(relx=0.2, y=80, relh=0.4, width=200)
+		fig1.place(relx=0.3, rely=0.3, relh=0.4, width=200, anchor='c')
 
 		nmae1 = tk.Label(self, text='Name1', relief=tk.GROOVE)
-		nmae1.place(relx=0.2, rely=0.55, width=200)
+		nmae1.place(relx=0.3, rely=0.55, width=200, anchor='c')
 
 		fig2 = tk.Label(self, text='Fig2', relief=tk.GROOVE)
-		fig2.place(relx=0.6, y=80, relh=0.4, width=200)
+		fig2.place(relx=0.7, rely=0.3, relh=0.4, width=200, anchor='c')
 
 		name2 = tk.Label(self, text='Name2', relief=tk.GROOVE)
-		name2.place(relx=0.6, rely=0.55, width=200)
+		name2.place(relx=0.7, rely=0.55, width=200, anchor='c')
 
-		question = tk.Label(self, text)
+		question = tk.Label(self, text = 'Are they alive at the same time?', bg="#eee5dc", font=('Arial', 20))
+		question.place(relx=0.5, rely=0.7, width=300, anchor='c')
+
+		btn_yes = tk.Button(self, text='YES', command=self.controller.press_yes)
+		btn_yes.place(relx=0.4, rely=0.8, width=75, anchor='c')
+
+		btn_no = tk.Button(self, text='NO', command=self.controller.press_no)
+		btn_no.place(relx=0.6, rely=0.8, width=75, anchor='c')
+
 
 
 
@@ -64,6 +74,12 @@ class Game():
 			frame.grid(row=0, column=0, sticky="nsew")
 
 		self.show_frame('MainFrame')
+
+	def press_yes(self):
+		pass
+
+	def press_no(self):
+		pass
 
 	def show_frame(self, frame_name):
 		self.frames[frame_name].tkraise()
