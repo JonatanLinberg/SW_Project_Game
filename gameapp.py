@@ -70,8 +70,6 @@ class GameFrame(tk.Frame):
 		self.fig1.config(image=self.controller.getCurrentImages(1))
 		self.fig2.config(image=self.controller.getCurrentImages(2))
 
-
-
 class Game():
 	def __init__(self, parent):
 		self.parent = parent
@@ -114,15 +112,16 @@ class Game():
 			for i in range(len(persons)):
 				if (persons[i].image is not None):
 					self.persons.append(persons[i])
-
 		self.nextRound()
 
 	def nextRound(self):
 		if (len(self.persons) >= 2):
 			self.currentPersons = [self.persons.pop(), self.persons.pop()]
 			self.currentImages = [None, None]
+			self.frames['GameFrame'].updateGame()
 		else:
-			self.show_frame('MainFrame')
+			self.frames['ResultFrame'].updateGame()
+			self.show_frame('ResultFrame')
 
 	def getCurrentImages(self, person):
 		if (self.currentImages[person-1] is None):
@@ -137,14 +136,20 @@ class Game():
 	def getPoints(self):
 		return self.points
 
+	def correctAnswer(self):
+		a, b = *self.currentPersons
+		return ((a.byear >= b.byear and a.byear <= b.dyear ) or (b.byear >= a.byear and b.byear <= a.dyear))
+
 	def press_yes(self):
-		self.points += 1
+		if (self.correctAnswer()):
+			self.points += 1
 		self.nextRound()
-		self.frames['GameFrame'].updateGame()
+		
 
 	def press_no(self):
+		if (not self.correctAnswer()):
+			self.points += 1
 		self.nextRound()
-		self.frames['GameFrame'].updateGame()
 
 	def show_frame(self, frame_name):
 		self.frames[frame_name].tkraise()
