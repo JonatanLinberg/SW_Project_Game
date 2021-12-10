@@ -24,7 +24,19 @@ class GameFrame(tk.Frame):
 		self.createGUI()
 
 	def createGUI(self):
-		pass
+		fig1 = tk.Label(self, text='Fig1', relief=tk.GROOVE)
+		fig1.place(relx=0.2, y=80, relh=0.4, width=200)
+
+		nmae1 = tk.Label(self, text='Name1', relief=tk.GROOVE)
+		nmae1.place(relx=0.2, rely=0.55, width=200)
+
+		fig2 = tk.Label(self, text='Fig2', relief=tk.GROOVE)
+		fig2.place(relx=0.6, y=80, relh=0.4, width=200)
+
+		name2 = tk.Label(self, text='Name2', relief=tk.GROOVE)
+		name2.place(relx=0.6, rely=0.55, width=200)
+
+		question = tk.Label(self, text)
 
 
 
