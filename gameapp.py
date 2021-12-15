@@ -1,6 +1,7 @@
 import tkinter as tk
 import urllib
 from PIL import Image, ImageTk
+from tkinter import messagebox as msb
 import io
 import person
 import query
@@ -159,17 +160,31 @@ class Game():
 
 	def correctAnswer(self):
 		a, b = self.currentPersons
-		return ((a.byear >= b.byear and a.byear <= b.dyear ) or (b.byear >= a.byear and b.byear <= a.dyear))
+		ans = ((a.byear >= b.byear and a.byear <= b.dyear ) or (b.byear >= a.byear and b.byear <= a.dyear))
+		return ans
+
+	def showResult(self, ans, c_ans):
+		m = "Wrong!\n"
+		if (ans == c_ans):
+			m = "Correct!\n"
+		a, b = self.currentPersons
+		m += "%s lived %s-%s\n%s lived %s-%s" % (a.name, a.byear, a.dyear, b.name, b.byear, b.dyear)
+		self.parent.after(0, lambda: msb.showinfo(message=m))
+
 
 	def press_yes(self):
-		if (self.correctAnswer()):
+		ans = self.correctAnswer()
+		if (ans):
 			self.points += 1
+		self.showResult(True, ans)
 		self.nextRound()
 		
 
 	def press_no(self):
-		if (not self.correctAnswer()):
+		ans = self.correctAnswer()
+		if (not ans):
 			self.points += 1
+		self.showResult(False, ans)
 		self.nextRound()
 
 	def show_frame(self, frame_name):
