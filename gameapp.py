@@ -20,8 +20,6 @@ class MainFrame(tk.Frame):
 
 		btn = tk.Button(self, text="Quit Game", width=20,command=self.controller.quit)
 		btn.place(relx=0.5, rely=0.6, anchor='c')
-
-		self.loadlbl = tk.Label(self, text="Loading Game...", width=20, font=('Arial', 20))
 		
 
 	def playGame(self):
@@ -30,6 +28,7 @@ class MainFrame(tk.Frame):
 
 	def isLoading(self, bool):
 		if (bool):
+			self.loadlbl = tk.Label(self, text="Loading Game...", width=20, font=('Arial', 20))
 			self.loadlbl.place(relx=0.5, rely=0.3, anchor='c')
 		else:
 			self.loadlbl.place_forget()
@@ -75,7 +74,7 @@ class GameFrame(tk.Frame):
 		self.name2 = tk.Label(self, text='Name2', relief=tk.GROOVE)
 		self.name2.place(relx=0.7, rely=0.55, width=200, anchor='c')
 
-		question = tk.Label(self, text='Are they alive at the same time?', bg="#eee5dc", font=('Arial', 20))
+		question = tk.Label(self, text='Were they alive at the same time?', bg="#eee5dc", font=('Arial', 20))
 		question.place(relx=0.5, rely=0.7, width=300, anchor='c')
 
 		btn_yes = tk.Button(self, text='YES', command=self.controller.press_yes)
